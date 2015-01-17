@@ -1,0 +1,175 @@
+<project name="prologtest" basedir="." default="main">
+
+    <property name="lib.dir"     value="lib"/>
+
+    <path id="classpath">
+        <fileset dir="${lib.dir}" includes="**/*.jar"/>
+    </path>
+
+    <property name="src.dir"     value="src"/>
+
+    <property name="build.dir"   value="build"/>
+    <property name="dist.dir"   value="dist"/>
+    <property name="classes.dir" value="${build.dir}/classes"/>
+    <property name="jar.dir"     value="${build.dir}/jar"/>
+    <property name="doc.dir" value="${build.dir}/doc"/>
+
+    <pathconvert property="relative.dir" pathsep=" ">
+        <path>
+            <fileset dir="lib" >
+                <include name="*.jar"/>
+            </fileset>
+        </path>
+        <globmapper from="${basedir}/*" to="*"/>
+    </pathconvert>
+
+    <path id="application" location="${dist.dir}/${ant.project.name}.jar"/>
+
+
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+    </target>
+
+    <target name="compile">
+        <mkdir dir="${classes.dir}"/>
+        <javac includeantruntime="true" debug="on"  srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath">
+            <compilerarg value="-Xlint"/>
+        </javac>
+    </target>
+
+    <target name="jar" depends="compile">
+        <mkdir dir="${jar.dir}"/>
+        <jar destfile="${jar.dir}/${ant.project.name}.jar">
+            <fileset dir="${classes.dir}"/>
+            <fileset dir="${src.dir}"/>
+            <manifest>
+                <attribute name="Main-Class" value="com.egypteam.test.prolog.Main"/>
+                <attribute name="Class-Path" value="${relative.dir}"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="javadoc">
+        <mkdir dir="${doc.dir}"/>
+        <javadoc access="public" author="true" classpathref="classpath" destdir="build/doc" doctitle="Java Prolog Test" nodeprecated="false" nodeprecatedlist="false" windowtitle="Java Prolog Test Library - Javadoc" noindex="false" nonavbar="false" notree="false" splitindex="true" use="true" version="true">
+            <sourcepath path="src"/>
+            <link href="http://download.oracle.com/javase/6/docs/api/"/>
+        </javadoc>
+    </target>
+
+    <target name="propagate" depends="jar">
+        <!--<copy file="build/jar/prologtest.jar" todir="../prologtest-test/lib"/>-->
+    </target>
+
+    <target name="clean-build" depends="clean,jar,javadoc,propagate"/>
+
+    <target name="main" depends="clean-build"/>
+    <target name="main4" depends="java4,clean-build"/>
+    <target name="main5" depends="java5,clean-build"/>
+    <target name="main6" depends="java6,clean-build"/>
+    <target name="main7" depends="java7,clean-build"/>
+    <target name="main8" depends="java8,clean-build"/>
+
+    <target name="dist" depends="main">
+        <copy todir="dist/lib">
+            <fileset dir="${lib.dir}" includes="**/*.jar" />
+        </copy>
+        <copy todir="dist">
+            <fileset dir="${jar.dir}" includes="${ant.project.name}.jar"/>
+        </copy>
+        <jar basedir="${doc.dir}" destfile="dist/prologtest-javadoc.jar"/>
+        <jar basedir="${src.dir}" destfile="dist/prologtest-sources.jar"/>
+    </target>
+    <target name="dist4" depends="main4">
+        <copy todir="dist/lib">
+            <fileset dir="${lib.dir}" includes="**/*.jar" />
+        </copy>
+        <copy todir="dist">
+            <fileset dir="${jar.dir}" includes="${ant.project.name}.jar"/>
+        </copy>
+    </target>
+    <target name="dist5" depends="main5">
+        <copy todir="dist/lib">
+            <fileset dir="${lib.dir}" includes="**/*.jar" />
+        </copy>
+        <copy todir="dist">
+            <fileset dir="${jar.dir}" includes="${ant.project.name}.jar"/>
+        </copy>
+    </target>
+    <target name="dist6" depends="main6">
+        <copy todir="dist/lib">
+            <fileset dir="${lib.dir}" includes="**/*.jar" />
+        </copy>
+        <copy todir="dist">
+            <fileset dir="${jar.dir}" includes="${ant.project.name}.jar"/>
+        </copy>
+    </target>
+    <target name="dist7" depends="main7">
+        <copy todir="dist/lib">
+            <fileset dir="${lib.dir}" includes="**/*.jar" />
+        </copy>
+        <copy todir="dist">
+            <fileset dir="${jar.dir}" includes="${ant.project.name}.jar"/>
+        </copy>
+    </target>
+    <target name="dist8" depends="main8">
+        <copy todir="dist/lib">
+            <fileset dir="${lib.dir}" includes="**/*.jar" />
+        </copy>
+        <copy todir="dist">
+            <fileset dir="${jar.dir}" includes="${ant.project.name}.jar"/>
+        </copy>
+    </target>
+    <target name="java4">
+        <property name="ant.build.javac.source" value="1.4"/>
+        <property name="ant.build.javac.target" value="1.4"/>
+    </target>
+    <target name="java5">
+        <property name="ant.build.javac.source" value="1.5"/>
+        <property name="ant.build.javac.target" value="1.5"/>
+    </target>
+    <target name="java6">
+        <property name="ant.build.javac.source" value="1.6"/>
+        <property name="ant.build.javac.target" value="1.6"/>
+    </target>
+    <target name="java7">
+        <property name="ant.build.javac.source" value="1.7"/>
+        <property name="ant.build.javac.target" value="1.7"/>
+    </target>
+    <target name="java8">
+        <property name="ant.build.javac.source" value="1.8"/>
+        <property name="ant.build.javac.target" value="1.8"/>
+    </target>
+
+    <target name="junit" depends="dist">
+        <junit printsummary="yes" haltonfailure="yes" haltonerror="yes">
+            <classpath>
+                <path refid="classpath"/>
+                <path refid="application"/>
+            </classpath>
+            <batchtest fork="yes">
+                <fileset dir="${src.dir}" includes="**/tests/junit/*Test.java" />
+            </batchtest>
+            <formatter type="plain" usefile="false"/>
+        </junit>
+    </target>
+
+    <target name="test" depends="junit">
+        <echo message="Tests OK. Code is stable!"/>
+    </target>
+
+    <property name="ant.logger" value="org.apache.tools.ant.listener.AnsiColorLogger"/>
+    <target name="real-build">
+        <exec dir="${basedir}" executable="ant" failonerror="true">
+            <arg line="-f build.xml test -logger ${ant.logger}" />
+        </exec>
+    </target>
+
+    <target name="demo" depends="real-build">
+        <exec dir="${dist.dir}" executable="java" failonerror="true">
+            <arg line="-jar ${ant.project.name}.jar" />
+            <arg value="${type}"/>
+        </exec>
+    </target>
+
+</project>
