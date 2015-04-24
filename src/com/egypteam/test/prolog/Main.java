@@ -20,7 +20,7 @@ public class Main {
         Query q1 =
                 new Query(
                         "consult",
-                        new Term[] { new Atom("/home/pedrofmj/Projects/Idea/EgypTeam/Artificial Intelligence/Khalid/prologtest/src/com/egypteam/test/prolog/resources/test.pl") }
+                        new Term[] { new Atom("/home/pedrofmj/Projects/Idea/EgypTeam/Artificial Intelligence/Khalid/prologtest/src/com/egypteam/test/logtalk/resource/test.pl") }
                 );
 
         System.out.println( "consult " + (q1.query() ? "succeeded" : "failed"));

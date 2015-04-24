@@ -15,7 +15,7 @@ public class MainTest extends TestCase {
     public void testMain() {
         try {
             Query q;
-            q = new Query("consult('/home/pedrofmj/Projects/Idea/EgypTeam/Artificial Intelligence/Khalid/prologtest/src/com/egypteam/test/prolog/resources/test.pl')");
+            q = new Query("consult('/home/pedrofmj/Projects/Idea/EgypTeam/Artificial Intelligence/Khalid/prologtest/src/com/egypteam/test/logtalk/resource/test.pl')");
             q.hasSolution();
             q = new Query("test");
             while (q.hasMoreElements()) {
